@@ -5,9 +5,9 @@ import (
 	"crypto/sha256"
 	"encoding/hex"
 	"github.com/gin-gonic/gin"
-	"go-study/config"
 	"io"
 	"strings"
+	"telemetry-lake/config"
 )
 
 func AuthMiddleware() gin.HandlerFunc {

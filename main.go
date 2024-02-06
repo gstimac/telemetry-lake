@@ -1,8 +1,8 @@
 package main
 
 import (
-	"go-study/config"
-	"go-study/server"
+	"telemetry-lake/config"
+	"telemetry-lake/server"
 )
 
 func main() {

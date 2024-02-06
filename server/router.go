@@ -2,8 +2,8 @@ package server
 
 import (
 	"github.com/gin-gonic/gin"
-	"go-study/controllers"
-	"go-study/middlewares"
+	"telemetry-lake/controllers"
+	"telemetry-lake/middlewares"
 )
 
 func NewRouter() *gin.Engine {

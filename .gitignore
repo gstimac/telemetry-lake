@@ -19,3 +19,12 @@
 
 # Go workspace file
 go.work
+
+# Intellij
+.idea
+
+# production configs
+production.yaml
+production.yml
+prod.yml
+prod.yaml
