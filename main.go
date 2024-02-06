@@ -6,11 +6,7 @@ import (
 )
 
 func main() {
-	//gin.DisableConsoleColor()
-	//f, _ := os.Create("gin.log")
-	//gin.DefaultWriter = io.MultiWriter(f, os.Stdout)
-
-	config.Init("test")
+	config.Init("development")
 	server.Init()
 }
 

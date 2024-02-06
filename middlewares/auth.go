@@ -3,26 +3,28 @@ package middlewares
 import (
 	"crypto/hmac"
 	"crypto/sha256"
+	"encoding/hex"
 	"github.com/gin-gonic/gin"
+	"go-study/config"
 	"io"
 	"strings"
 )
 
 func AuthMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		//config := config.GetConfig()
-		hmacHeader := c.Request.Header.Get("x-hub-signature-256")
-		jsonData, err := io.ReadAll(c.Request.Body)
+		cfg := config.GetConfig()
+		var secret = cfg.GetString("github.webhook.secret")
+		var sigHeader = cfg.GetString("github.webhook.signature-header")
+
+		hmacHeader := c.Request.Header.Get(sigHeader)
+		byteBody, err := io.ReadAll(c.Request.Body)
 		if err != nil {
 			c.Err()
 		}
 
-		message := string(jsonData)
 		splitHeader := strings.Split(hmacHeader, "=")
 		algorithm := splitHeader[0]
 		signature := splitHeader[1]
-
-		var secret string = "verysecret"
 
 		if algorithm != "sha256" {
 			c.AbortWithStatus(500)
@@ -30,7 +32,7 @@ func AuthMiddleware() gin.HandlerFunc {
 		if len(signature) == 0 {
 			c.AbortWithStatus(401)
 		}
-		if !ValidMAC([]byte(message), []byte(hmacHeader), []byte(secret)) {
+		if !ValidMAC(string(byteBody), signature, secret) {
 			c.AbortWithStatus(401)
 			return
 		}
@@ -38,9 +40,9 @@ func AuthMiddleware() gin.HandlerFunc {
 	}
 }
 
-func ValidMAC(message, messageMAC, key []byte) bool {
-	mac := hmac.New(sha256.New, key)
-	mac.Write(message)
-	expectedMAC := mac.Sum(nil)
-	return hmac.Equal(messageMAC, expectedMAC)
+func ValidMAC(message string, messageMAC string, key string) bool {
+	mac := hmac.New(sha256.New, []byte(key))
+	mac.Write([]byte(message))
+	expectedMAC := hex.EncodeToString(mac.Sum(nil))
+	return messageMAC == expectedMAC
 }

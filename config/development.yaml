@@ -1,0 +1,4 @@
+github:
+  webhook:
+    secret: "verysecret"
+    signature-header: "x-hub-signature-256"
