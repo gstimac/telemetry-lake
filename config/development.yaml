@@ -2,3 +2,10 @@ github:
   webhook:
     secret: "verysecret"
     signature-header: "x-hub-signature-256"
+minio:
+  endpoint: "localhost:9000"
+  user:
+    access-key-id: "VWOEE93slRVE7kso9tCW"
+    secret-access-key: "Erk6DlqnMAbYlrsXY9kmlvQUTHx3wIJT9w04Bwdu"
+  bucket: "github"
+  useSSL: "false"
