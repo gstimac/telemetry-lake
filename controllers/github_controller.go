@@ -46,7 +46,7 @@ func putBlob(ioReader io.Reader) {
 	}
 
 	rand.Seed(time.Now().UnixNano())
-	objectName := "testdata" + strconv.Itoa(rand.Int())
+	objectName := "githubevent" + strconv.Itoa(rand.Int()) + ".jsonl"
 	contentType := "application/octet-stream"
 
 	// Upload the test file with FPutObject. With size -1 this will use memory, fix this later
