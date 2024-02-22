@@ -47,7 +47,7 @@ func putBlob(ioReader io.Reader) {
 
 	rand.Seed(time.Now().UnixNano())
 	objectName := "githubevent" + strconv.Itoa(rand.Int()) + ".jsonl"
-	contentType := "application/octet-stream"
+	contentType := "application/json"
 
 	// Upload the test file with FPutObject. With size -1 this will use memory, fix this later
 	info, err := mc.PutObject(ctx, bucket, objectName, ioReader, -1, minio.PutObjectOptions{ContentType: contentType})

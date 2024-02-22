@@ -12,6 +12,7 @@ docker compose -f docker-compose.yml up -d
 - create an access-key-id and secret-access-key and set them in config/development.yaml as well
 
 ### Installing Clickhouse
+Actually, you need a newer version of the server than the .deb supports from this repo. 
 ```
 sudo apt-key adv --keyserver keyserver.ubuntu.com --recv E0C56BD4
 echo "deb http://repo.yandex.ru/clickhouse/deb/stable/ main/" | sudo tee /etc/apt/sources.list.d/clickhouse.list
