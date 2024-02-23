@@ -57,3 +57,5 @@ func putBlob(ioReader io.Reader) {
 
 	log.Printf("Successfully uploaded %s of size %d\n", objectName, info.Size)
 }
+
+//

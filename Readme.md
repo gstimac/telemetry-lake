@@ -12,15 +12,11 @@ docker compose -f docker-compose.yml up -d
 - create an access-key-id and secret-access-key and set them in config/development.yaml as well
 
 ### Installing Clickhouse
-Actually, you need a newer version of the server than the .deb supports from this repo. 
+Follow the clickhouse quickstart to download, install and start the server
 ```
-sudo apt-key adv --keyserver keyserver.ubuntu.com --recv E0C56BD4
-echo "deb http://repo.yandex.ru/clickhouse/deb/stable/ main/" | sudo tee /etc/apt/sources.list.d/clickhouse.list
-sudo apt update
-sudo apt install clickhouse-server clickhouse-client
-sudo vim /etc/clickhouse-server/config.xml # change TCP port from 9000 to 9001 so it doesn't conflict with minio
-sudo service clickhouse-server start
-sudo service clickhouse-server status
+sudo ./clickhouse install
+sudo clickhouse start
+cp ./clickhouse/etc/clickhouse-server/config.xml /etc/clickhouse-server/config.xml
 clickhouse-client --password --port 9001
 ```
 ### Configuring Github webhooks

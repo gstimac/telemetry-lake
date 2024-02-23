@@ -4,7 +4,7 @@ FROM s3(
              'VWOEE93slRVE7kso9tCW', 'Erk6DlqnMAbYlrsXY9kmlvQUTHx3wIJT9w04Bwdu',
              'JSONEachRow'
      )
-LIMIT 100;
+LIMIT 1;
 ---
 SELECT action, workflow_run.actor.events_url, workflow_run.run_started_at
 FROM s3(
