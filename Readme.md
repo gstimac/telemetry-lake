@@ -4,7 +4,7 @@
 
 ### Start and configure Minio
 ```
-docker compose -f docker-compose.yml up -d 
+docker compose -f minio-compose.yml up -d 
 ```
 - open http://localhost:9090
 - log in with the username and password you set (or the default ones)
@@ -17,7 +17,17 @@ Follow the clickhouse quickstart to download, install and start the server
 sudo ./clickhouse install
 sudo clickhouse start
 cp ./clickhouse/etc/clickhouse-server/config.xml /etc/clickhouse-server/config.xml
-clickhouse-client --password --port 9001
+clickhouse-client --port 19000
+
+docker run -d -p 18123:8123 -p19000:9000 \
+    --name some-clickhouse-server \
+    --ulimit nofile=262144:262144 \
+    -v $(realpath ./ch_data):/var/lib/clickhouse/ \
+    -v $(realpath ./ch_logs):/var/log/clickhouse-server/ \
+    -v $(realpath ./clickhouse/etc/clickhouse-server/config.xml):/etc/clickhouse-server/config.xml \
+    clickhouse/clickhouse-server:24.6.2.17
+echo 'SELECT version()' | curl 'http://localhost:18123/' --data-binary @-
+
 ```
 ### Configuring Github webhooks
 To ingest event from Github, configure an organization or repository webhook.

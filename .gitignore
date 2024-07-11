@@ -28,3 +28,6 @@ production.yaml
 production.yml
 prod.yml
 prod.yaml
+
+ch_data
+ch_logs

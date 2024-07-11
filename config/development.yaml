@@ -5,7 +5,7 @@ github:
 minio:
   endpoint: "localhost:9000"
   user:
-    access-key-id: "VWOEE93slRVE7kso9tCW"
-    secret-access-key: "Erk6DlqnMAbYlrsXY9kmlvQUTHx3wIJT9w04Bwdu"
+    access-key-id: "Bry70IdY9j31keuwSyUM"
+    secret-access-key: "CgL9X8905qcmRQA6eC1VqAXaBxBCPa2jsJpNr822"
   bucket: "github"
   useSSL: "false"
