@@ -1,0 +1,12 @@
+github:
+  webhook:
+    secret: "rw7YHv6Kpp7y*!Pt8ew#CU^i"
+    signature-header: "x-hub-signature-256"
+minio:
+  endpoint: "ghost.stimac.xyz:9000"
+  user:
+    access-key-id: "Bry70IdY9j31keuwSyUM"
+    secret-access-key: "CgL9X8905qcmRQA6eC1VqAXaBxBCPa2jsJpNr822"
+  bucket: "github"
+  useSSL: "false"
+  
