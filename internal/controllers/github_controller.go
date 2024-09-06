@@ -10,25 +10,14 @@ import (
 	"math/rand"
 	"strconv"
 	"telemetry-lake/internal/config"
+	"telemetry-lake/internal/models"
 	"time"
 )
 
+type GithubEvent models.GithubEvent
 type GithubController struct{}
 
-func (h GithubController) WriteEvent(c *gin.Context) {
-	putBlob(c.Request.Body)
-	c.JSON(200, gin.H{
-		"message": "written",
-	})
-}
-
-func (h GithubController) Ping(c *gin.Context) {
-	c.JSON(200, gin.H{
-		"message": "pong",
-	})
-}
-
-func putBlob(ioReader io.Reader) {
+func CreateGithubEvent(reader io.Reader) GithubEvent {
 	cfg := config.GetConfig()
 	ctx := context.Background()
 	var endpoint = cfg.GetString("minio.endpoint")
@@ -45,17 +34,38 @@ func putBlob(ioReader io.Reader) {
 		log.Fatalln(err)
 	}
 
-	rand.Seed(time.Now().UnixNano())
-	objectName := "githubevent" + strconv.Itoa(rand.Int()) + ".jsonl"
+	source := rand.NewSource(time.Now().UnixNano())
+	rng := rand.New(source)
+
+	ghevent := GithubEvent{
+		ID:          rng.Int(),
+		Name:        "macka",
+		Age:         14,
+		Description: "debela macka",
+	}
+
+	objectName := "githubevent" + strconv.Itoa(rng.Int()) + ".jsonl"
 	contentType := "application/json"
 
 	// Upload the test file with FPutObject. With size -1 this will use memory, fix this later
-	info, err := mc.PutObject(ctx, bucket, objectName, ioReader, -1, minio.PutObjectOptions{ContentType: contentType})
+	info, err := mc.PutObject(ctx, bucket, objectName, reader, -1, minio.PutObjectOptions{ContentType: contentType})
 	if err != nil {
 		log.Fatalln(err)
 	}
 
 	log.Printf("Successfully uploaded %s of size %d\n", objectName, info.Size)
+	return ghevent
 }
 
-//
+func (h GithubController) WriteEvent(c *gin.Context) {
+	CreateGithubEvent(c.Request.Body)
+	c.JSON(200, gin.H{
+		"message": "written",
+	})
+}
+
+func (h GithubController) Ping(c *gin.Context) {
+	c.JSON(200, gin.H{
+		"message": "pong",
+	})
+}

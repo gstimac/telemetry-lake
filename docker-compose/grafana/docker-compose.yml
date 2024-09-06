@@ -1,0 +1,13 @@
+services:
+  grafana:
+    image: grafana/grafana-enterprise@sha256:c2385aa9c42e787be12a1fb41705c2e7cb98f6b085db24efb70b814062ab18a1
+    container_name: grafana
+    restart: unless-stopped
+    environment:
+      - GF_INSTALL_PLUGINS=grafana-clickhouse-datasource
+    ports:
+      - '3000:3000'
+    volumes:
+      - 'grafana_storage:/var/lib/grafana'
+volumes:
+  grafana_storage: {}

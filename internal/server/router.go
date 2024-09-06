@@ -19,7 +19,7 @@ func NewRouter() *gin.Engine {
 	gh := router.Group("github")
 	{
 		gh.GET("ping", ghCtrl.Ping)
-		gh.POST("write_event", ghCtrl.WriteEvent)
+		gh.POST("event", ghCtrl.WriteEvent)
 	}
 
 	return router

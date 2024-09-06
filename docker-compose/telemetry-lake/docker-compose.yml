@@ -1,0 +1,31 @@
+services:
+  minio:
+    image: 'minio/minio:RELEASE.2024-02-06T21-36-22Z.fips@sha256:3a320438cf10928e2ffefd9e13ec4df59f9fa3b82918965552b35310e1d32cc2'
+    ports:
+      - '${FORWARD_MINIO_PORT:-9000}:9000'
+      - '${FORWARD_MINIO_CONSOLE_PORT:-9090}:9090'
+    environment:
+      MINIO_ROOT_USER: 'root'
+      MINIO_ROOT_PASSWORD: 'password'
+    volumes:
+      - 'minio:/data/minio'
+    command: minio server /data/minio --console-address ":9090"
+  clickhouse:
+    image: 'clickhouse/clickhouse-server:24.8.3.59'
+    ulimits:
+      nofile:
+        soft: "262144"
+        hard: "262144"
+
+    ports:
+      - '${FORWARD_CLICKHOUSE_PORT:-18123}:8123'
+      - '${FORWARD_CLICKHOUSE_HTTP_PORT:-19000}:9000'
+    volumes:
+      - /opt/clickhouse/etc/clickhouse-server/config.xml:/etc/clickhouse-server/config.xml
+      - /opt/clickhouse:/var/lib/clickhouse
+      - /var/log/clickhouse:/var/log/clickhouse-server
+volumes:
+  minio:
+    driver: local
+  clickhouse:
+    driver: local
