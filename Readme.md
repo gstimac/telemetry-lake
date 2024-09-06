@@ -48,16 +48,25 @@ LIMIT 100;
 ```
 ```
 DESCRIBE table s3('http://server_url:9000/github/githubevent3158334967620065350.jsonl', '${access-key-id_value}', '${secret_access_key_value}') SETTINGS allow_experimental_object_type
-SELECT * FROM s3('http://server_url:9000/github/*.jsonl', '${access-key-id_value}', '${secret_access_key_value}') SETT) SETTINGS allow_experimental_object_type
+SELECT * FROM s3('http://server_url:9000/github/*.jsonl', '${access-key-id_value}', '${secret_access_key_value}')) SETTINGS allow_experimental_object_type
 
-select
+select workflow.name, workflow_run.created_at, 
+date_diff('seconds',
+  toDateTimeOrNull(
+    replaceRegexpOne(
+      toString(workflow_run.run_started_at),
+    '^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})Z$', '\\1/\\2/\\3 \\4:\\5:\\6')), 
+  toDateTimeOrNull(
+    replaceRegexpOne(
+      toString(workflow_run.updated_at),
+    '^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})Z$', '\\1/\\2/\\3 \\4:\\5:\\6'))) as lasted_seconds,
 toDateTimeOrNull(
-replaceRegexpOne(
-toString(workflow_run.run_started_at),
-'^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})Z$', '\\1/\\2/\\3 \\4:\\5:\\6')
-) AS time, 1, workflow_run.name
+  replaceRegexpOne(
+    toString(workflow_run.run_started_at),
+  '^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})Z$', '\\1/\\2/\\3 \\4:\\5:\\6')
+) AS time
 from s3('http://ghost.stimac.xyz:9000/github/*.jsonl', 'Bry70IdY9j31keuwSyUM', 'CgL9X8905qcmRQA6eC1VqAXaBxBCPa2jsJpNr822')
-where action = 'completed'
-GROUP BY workflow_run.run_started_at, workflow_run.name, 1
+where workflow_run.created_at IS NOT NULL
+group by workflow.name, lasted_seconds, workflow_run.created_at, workflow_run.run_started_at
 order by time asc
 ```
